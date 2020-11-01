@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `organization` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
-USE `organization`;
 -- MySQL dump 10.13  Distrib 8.0.14, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: organization
@@ -27,6 +25,7 @@ DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `userId` bigint(20) NOT NULL,
+  `organizationId` bigint(20) NOT NULL,
   `roleId` bigint(20) NOT NULL,
   `createdBy` bigint(20) NOT NULL,
   `updatedBy` bigint(20) NOT NULL,
@@ -38,12 +37,14 @@ CREATE TABLE `employee` (
   `endsAt` datetime DEFAULT NULL,
   `notes` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
-  KEY `idx_employee_user` (`userId`),
+  KEY `idx_employee_user` (`userId`) /*!80000 INVISIBLE */,
   KEY `idx_employee_creator` (`createdBy`),
   KEY `idx_employee_modifier` (`updatedBy`),
   KEY `idx_employee_role` (`roleId`),
+  KEY `idx_employee_organization` (`organizationId`),
   CONSTRAINT `fk_employee_creator` FOREIGN KEY (`createdBy`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_employee_modifier` FOREIGN KEY (`updatedBy`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_employee_organization` FOREIGN KEY (`organizationId`) REFERENCES `organization` (`id`),
   CONSTRAINT `fk_employee_role` FOREIGN KEY (`roleId`) REFERENCES `role` (`id`),
   CONSTRAINT `fk_employee_user` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -263,4 +264,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-01 12:49:14
+-- Dump completed on 2020-11-01 13:33:42
